@@ -1,9 +1,9 @@
-# Disco x Cred Protocol Digital Asset Score Demo 🕺🔮
+# Disco x Gitcoin Digital Asset Score Demo 🕺🔮
 
 <!-- ### Check out the live demo 👉 [NextJS wagmi](https://nextjs-wagmi.vercel.app/) -->
 
 ## Overview
-Simple next.js app which pings the [Cred Protocol](https://www.credprotocol.com/) API and fetches details about an account's on-chain score (value + value rating), and issues this as a Digital Asset [Credential](https://raw.githubusercontent.com/discoxyz/disco-schemas/main/json/DigitalAssetScoreCredential/1-0-0.json) to the connected wallet's Disco Data Backpack.
+Simple next.js app which pings the [Gitcoin](https://www.credprotocol.com/) API and fetches details about an account's on-chain score (value + value rating), and issues this as a Digital Asset [Credential](https://raw.githubusercontent.com/discoxyz/disco-schemas/main/json/DigitalAssetScoreCredential/1-0-0.json) to the connected wallet's Disco Data Backpack.
 
 ## How to use this template
 

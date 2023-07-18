@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useAccount, useBalance } from "wagmi";
 import { Button, Layout, Loader, WalletOptionsModal } from "../components";
 import { issueCredential } from "../utils/discoClient";
-import { getCreditScore } from "../utils/credProtocolClient";
+import { getCreditScore } from "../utils/gitcoinClient";
 
 import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-modal';
@@ -15,37 +15,33 @@ import 'react-toastify/dist/ReactToastify.css';
 const Home: NextPage = () => {
   const [showWalletOptions, setShowWalletOptions] = useState(false);
   const [{ data: accountData, loading: accountLoading }] = useAccount();
-  const [creditScore, setCreditScore] = useState('');
-  const [creditRating, setCreditRating] = useState('');
+  const [score, setScore] = useState('');
   const [summary, setSummary] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const loading = (accountLoading);
 
-  const fetchCredit = async (recipient: string) => {
+  const fetchScore = async (recipient: string) => {
     const data = await getCreditScore(recipient);
     
-    if (data.value && data.value_rating) {
-      setCreditScore(data.value as string);
-      setCreditRating(data.value_rating);
+    if (data) {
+      setScore(data.score as string);
     } else {
-      setCreditRating("N/A");
-      setCreditScore("N/A");
+      setScore("N/A");
     }
 
-    issueCreditCredential(recipient || '', creditScore, creditRating)
+    // issueCreditCredential(recipient || '', score)
   };
 
-  const issueCreditCredential = async (recipient: string, creditScore: string, creditRating: string): Promise<void> => {
+  const issueCreditCredential = async (recipient: string, score: string): Promise<void> => {
     const schemaUrl = 'https://raw.githubusercontent.com/discoxyz/disco-schemas/e2e3d4817aa769194e42470bf67d4b30ae3585f9/json/DigitalAssetScoreCredential/1-0-0.json';
-    console.log(typeof(creditScore));
+    console.log(typeof(score));
     const subjectData = {
-      value: `${creditScore}`,
-      valueRating: creditRating
+      score: `${score}`,
     };
   
     try {
-      console.log(`Issuing digital asset score cred to: ${recipient}`);
+      console.log(`Issuing Gitcoin Passport score cred to: ${recipient}`);
   
       const credential = await issueCredential(schemaUrl, recipient, subjectData);
       // console.log('Issued credential:', credential);
@@ -60,11 +56,10 @@ const Home: NextPage = () => {
   
 
   useEffect(() => {
-    console.log({ creditScore });
-    console.log({ creditRating });
+    console.log({ score });
     
-    setSummary(`Your credit score is: ${creditScore} with a rating of ${creditRating}`);
-  }, [creditScore, creditRating]);
+    setSummary(`Your Proof Of Humanness score is: ${score}. You can increase this by collecting Gitcoin Passport Stamps`);
+  }, [score]);
 
   const renderContent = () => {
     if (loading) return <Loader size={8} />;
@@ -73,15 +68,13 @@ const Home: NextPage = () => {
     return (
       <>
         <h1 className="mb-8 text-4xl font-bold">
-          Cred Protocol Digital Asset Credit Score
+          Gitcoin Passport Score
         </h1> 
         <h3> 
-          Click the button to get your score. The Cred Score is a decentralized credit score is based on your onchain activity. 
-          <br/>
-          This score quantifies your onchain creditworthiness. Your score will be private until you make it public in Disco.
+        Gitcoin Passport acts as an aggregator of decentralized society credentials, proving your trustworthiness without needing to collect personally identifiable information. This process transmits more Sybil resistance out to the entire ecosystem.<br/>
         </h3>
 
-        <Button loading={false} onClick={() => fetchCredit(accountData?.address || "")}> 
+        <Button loading={false} onClick={() => fetchScore(accountData?.address || "")}> 
           Get my Score
         </Button>
       </>
@@ -101,7 +94,7 @@ const Home: NextPage = () => {
       >
         <div className="grid h-screen place-items-center">
           <div className="grid place-items-center">{renderContent()}</div>
-          <div> <strong>{summary} </strong> </div>
+          <div> <strong>{summary}<a href="https://passport.gitcoin.co/"> here. </a></strong> </div>
         </div>
       </Layout>
 
@@ -147,3 +140,4 @@ const modalContent = (
       <p>Remember to mark your credential PUBLIC to use it in other apps!</p>
   </div>
 );
+
