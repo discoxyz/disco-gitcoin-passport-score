@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useAccount, useBalance } from "wagmi";
 import { Button, Layout, Loader, WalletOptionsModal } from "../components";
 import { issueCredential } from "../utils/discoClient";
-import { getCreditScore } from "../utils/gitcoinClient";
+import { getPassportScore, getStamps } from "../utils/gitcoinClient";
 
 import { ToastContainer, toast } from 'react-toastify';
 import Modal from 'react-modal';
@@ -18,24 +18,38 @@ const Home: NextPage = () => {
   const [score, setScore] = useState('');
   const [summary, setSummary] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [stamps, setStamps] = useState("");
 
   const loading = (accountLoading);
 
   const fetchScore = async (recipient: string) => {
-    const data = await getCreditScore(recipient);
+    const data = await getPassportScore(recipient);
     
     if (data) {
       setScore(data.score as string);
+      fetchStamps(recipient);
     } else {
       setScore("N/A");
     }
-
-    // issueCreditCredential(recipient || '', score)
+    
+    issueScoreCredential(recipient || '', score);
   };
 
-  const issueCreditCredential = async (recipient: string, score: string): Promise<void> => {
-    const schemaUrl = 'https://raw.githubusercontent.com/discoxyz/disco-schemas/e2e3d4817aa769194e42470bf67d4b30ae3585f9/json/DigitalAssetScoreCredential/1-0-0.json';
-    console.log(typeof(score));
+  const fetchStamps = async (recipient: string) => {
+    const data = await getStamps(recipient);
+    
+    if (data) {
+      const stamps = data.join(",")
+      setStamps(stamps);
+      console.log(stamps);
+    } else {
+      setStamps("");
+    }
+  };
+
+  const issueScoreCredential = async (recipient: string, score: string): Promise<void> => {
+    const schemaUrl = 'https://raw.githubusercontent.com/discoxyz/disco-schemas/main/json/GitcoinPassportScoreCredential/1-0-0.json';
+    // console.log(typeof(score));
     const subjectData = {
       score: `${score}`,
     };
@@ -57,8 +71,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     console.log({ score });
-    
-    setSummary(`Your Proof Of Humanness score is: ${score}. You can increase this by collecting Gitcoin Passport Stamps`);
+    console.log({ stamps });
   }, [score]);
 
   const renderContent = () => {
@@ -94,7 +107,6 @@ const Home: NextPage = () => {
       >
         <div className="grid h-screen place-items-center">
           <div className="grid place-items-center">{renderContent()}</div>
-          <div> <strong>{summary}<a href="https://passport.gitcoin.co/"> here. </a></strong> </div>
         </div>
       </Layout>
 
@@ -116,7 +128,9 @@ const Home: NextPage = () => {
         <button onClick={() => setModalIsOpen(false)} className="close-button">
             x
         </button>
-        <h2> {summary} </h2>
+        <h2> Your Proof Of Humanness score is: <strong> {score} </strong> </h2>
+        <br/> 
+        <h2>Passport Stamps found: <strong> {stamps} </strong> </h2>
         {modalContent}
       </Modal>
     </>
@@ -130,10 +144,16 @@ export default Home;
 
 const modalContent = (
   <div>
+    <br/> <br/>
     <h1 className="header">
-        Manage your score in{' '}
+       Increase your score and collect more stamps  {''}
+        <a href="https://passport.gitcoin.co" className="text-blue-500">
+          here.
+        </a>
+        <br/>
+        Collect this as a credential in Disco {''}
         <a href="https://app.disco.xyz" className="text-blue-500">
-          Disco.
+          here.
         </a>
       </h1>
       <br/>
