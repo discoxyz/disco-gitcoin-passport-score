@@ -81,10 +81,14 @@ const Home: NextPage = () => {
     return (
       <>
         <h1 className="mb-8 text-4xl font-bold">
-          Gitcoin Passport Score
+          Gitcoin Passport Score ~ Disco Demo
         </h1> 
-        <h3> 
-        Gitcoin Passport acts as an aggregator of decentralized society credentials, proving your trustworthiness without needing to collect personally identifiable information. This process transmits more Sybil resistance out to the entire ecosystem.<br/>
+
+        <h3 className="px-64 pb-12"> 
+        Welcome! Gitcoin Passport acts as an aggregator of decentralized society credentials, proving your trustworthiness without needing to collect personally identifiable information. 
+        This process transmits more Sybil resistance out to the entire ecosystem.
+        <br/> 
+        <br/> To easily claim your Gitcoin Passport Score as a credential: <b>Connect your wallet, then click the button below! </b>
         </h3>
 
         <Button loading={false} onClick={() => fetchScore(accountData?.address || "")}> 
