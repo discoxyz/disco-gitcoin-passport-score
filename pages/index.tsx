@@ -85,8 +85,8 @@ const Home: NextPage = () => {
         </h1> 
 
         <h3 className="px-64 pb-12"> 
-        Welcome! Gitcoin Passport acts as an aggregator of decentralized society credentials, proving your trustworthiness without needing to collect personally identifiable information. 
-        This process transmits more Sybil resistance out to the entire ecosystem.
+        Gitcoin Passport allows you to collecting “stamps” of validation for your identity and online reputation, you can gain access to the most trustworthy web3 experiences and maximize your ability to benefit from platforms like Gitcoin Grants. 
+        The more you verify your identity, the more opportunities you will have to vote and participate across the web3.
         <br/> 
         <br/> To easily claim your Gitcoin Passport Score as a credential: <b>Connect your wallet, then click the button below! </b>
         </h3>
